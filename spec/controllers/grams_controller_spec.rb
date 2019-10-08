@@ -109,7 +109,7 @@ RSpec.describe GramsController, type: :controller do
       expect(response).to have_http_status(:not_found)
     end
   end
-  
+
   describe "grams#show action" do
     it "should successfully show the page if the gram is found" do
       gram = FactoryBot.create(:gram)
@@ -156,9 +156,14 @@ it "should require users to be logged in" do
       user = FactoryBot.create(:user)
       sign_in user
 
-      post :create, params: { gram: { message: 'Hello!' } }
-      expect(response).to redirect_to root_path
-
+      post :create, params: {
+        gram: {
+          message: 'Hello!',
+          picture: fixture_file_upload("/picture.jpg", 'image/jpg')
+        }
+      }
+    expect(response).to redirect_to root_path
+      
       gram = Gram.last
       expect(gram.message). to eq("Hello!")
       expect(gram.user).to eq(user)
